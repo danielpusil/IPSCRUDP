@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://java.sun.com/jsf/html" 
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" http-equiv="X-UA-Conpatible" />
+        <h:outputStylesheet library="css" name="bootstrap.min.css" />     
+        <title>Crud Pacientes  </title>
+        <style type="text/css">
+            .tableUpdated {
+                width: 90% !important;
+                margin: 17px 58px 0 !important;
+            }
+            .btnSpace {
+                margin: 17px;
+            }     
+        </style>
+    </h:head>
+    <h:body>
+
+        <h:form id="patientForm">
+
+            <center>
+                <h2>
+                    <h:outputText value="Datos de Pacientes"/>
+
+                </h2>
+            </center>
+            <center>
+                <h:commandButton action="createPatient.xhtml?faces-redirect=true" value="Crear Nuevo" class="btn btn-success btnSpace" />
+            </center>
+            <p:dataTable id="patientTable" binding="#{table}" value="#{patientBean.patientsList()}" var="patient" 
+                         widgetVar="patientTable"
+                         rows="10"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,20,50,100" >
+
+                <f:facet name="header">
+                    <p:outputPanel>
+                        <h:outputText value="Buscar en todos los campos" />
+                        <p:inputText id="globalFilter" onkeyup="PF('patientTable').filter()" style="width:150px" placeholder="Buscar..."/>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column filterBy="#{patient.identification}" headerText="Id" footerText="contains" filterMatchMode="contains">
+                    <f:facet name="header">Identificacion</f:facet>
+                    <h:outputText value="#{patient.identification}" />
+                </p:column>
+
+                <p:column filterBy="#{patient.name}"  footerText="contains" filterMatchMode="contains">
+                    <f:facet name="header">Nombre</f:facet>
+                    <h:outputText value="#{patient.name}" />
+                </p:column>
+
+                <p:column filterBy="#{patient.age}"  footerText="contains" filterMatchMode="contains">
+                    <f:facet name="header">Edad</f:facet>
+                    <h:outputText value="#{patient.age}" />
+                </p:column>
+
+                <p:column filterBy="#{patient.gender}" headerText="Genero" footerText="exact" filterMatchMode="exact">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('patientTable').filter()" >
+                            <f:selectItem itemLabel="Selecione uno" itemValue="#{null}" noSelectionOption="true" />           
+                            <f:selectItem itemLabel="M" itemValue="M" />
+                            <f:selectItem itemLabel="F" itemValue="F" />
+                        </p:selectOneMenu>
+                    </f:facet>
+
+                    <h:outputText value="#{patient.gender}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">Regimen</f:facet>
+                    <h:outputText value="#{patient.regimen}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">Zona</f:facet>
+                    <h:outputText value="#{patient.zone}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">Direccion</f:facet>
+                    <h:outputText value="#{patient.address}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">Opciones</f:facet>
+                    <h:commandButton action="#{patientBean.getDetaills(patient.identification)}" value="Ver Historia" class="btn btn-primary" />
+                    <h:commandButton action="#{patientBean.editPatientRecord(patient.identification)}" value="Actualizar" class="btn btn-primary" />
+                    <h:commandButton action="#{patientBean.deletePatientRecord(patient.identification)}" value="Eliminar" class="btn btn-danger" />
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+    </h:body>
+</html>
